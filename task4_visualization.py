@@ -9,17 +9,11 @@ import os
 from datetime import datetime
 
 import matplotlib
-matplotlib.use("Agg")   # non-interactive backend — works without a display
+matplotlib.use("Agg")   
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
-
-
-# ── Setup ─────────────────────────────────────────────────────────────────────
-
 OUTPUT_DIR = "visualizations"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
-
-# Shared style
 PALETTE = ["#6C63FF", "#48C9B0", "#F39C12", "#E74C3C", "#3498DB",
            "#2ECC71", "#9B59B6", "#E67E22", "#1ABC9C", "#E91E63"]
 plt.rcParams.update({
@@ -62,8 +56,6 @@ def chart_github_top_repos(github_data):
     fig, ax = plt.subplots(figsize=(10, 6))
     bars = ax.barh(labels[::-1], scores[::-1], color=colors[::-1],
                    edgecolor="white", linewidth=0.5)
-
-    # Value labels inside bars
     for bar, score in zip(bars, scores[::-1]):
         ax.text(
             bar.get_width() * 0.98, bar.get_y() + bar.get_height() / 2,
@@ -78,10 +70,6 @@ def chart_github_top_repos(github_data):
     ax.set_axisbelow(True)
     fig.tight_layout()
     save_fig(fig, "chart1_github_top_repos.png")
-
-
-# ── Chart 2: GitHub — Programming language distribution ──────────────────────
-
 def chart_github_languages(github_data):
     """Pie / donut chart of the top 8 programming languages."""
     top_langs = github_data.get("top_languages", [])
@@ -111,10 +99,6 @@ def chart_github_languages(github_data):
     ax.set_title("GitHub Trending — Language Distribution (Top 8)", pad=16)
     fig.tight_layout()
     save_fig(fig, "chart2_github_languages.png")
-
-
-# ── Chart 3: Hacker News — Top 10 stories engagement ────────────────────────
-
 def chart_hn_engagement(hn_data):
     """
     Stacked horizontal bar chart showing score vs (comment * 3)
@@ -146,9 +130,6 @@ def chart_hn_engagement(hn_data):
     ax.set_axisbelow(True)
     fig.tight_layout()
     save_fig(fig, "chart3_hn_engagement.png")
-
-
-# ── Chart 4: Weather — Temperature & wind comparison ─────────────────────────
 
 def chart_weather_comparison(weather_data):
     """
@@ -194,9 +175,6 @@ def chart_weather_comparison(weather_data):
     fig.tight_layout()
     save_fig(fig, "chart4_weather_comparison.png")
 
-
-# ── Chart 5: Dashboard summary ────────────────────────────────────────────────
-
 def chart_summary_dashboard(report):
     """
     A 2×2 summary dashboard combining key KPIs:
@@ -216,7 +194,6 @@ def chart_summary_dashboard(report):
     hn_data      = report.get("hackernews", {})
     weather_data = report.get("weather", {})
 
-    # ── Panel A: GitHub top 5 languages ──────────────────────────────────────
     ax = axes[0][0]
     top_langs = github_data.get("top_languages", [])[:6]
     if top_langs:
@@ -230,8 +207,6 @@ def chart_summary_dashboard(report):
     else:
         ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
         ax.set_title("GitHub — Top Languages", fontsize=12)
-
-    # ── Panel B: HN — score vs comments scatter ───────────────────────────────
     ax = axes[0][1]
     top10_hn = hn_data.get("top10_stories", [])
     if top10_hn:
@@ -250,8 +225,6 @@ def chart_summary_dashboard(report):
     else:
         ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
         ax.set_title("HN — Score vs Comments", fontsize=12)
-
-    # ── Panel C: City temperature bar ─────────────────────────────────────────
     ax = axes[1][0]
     city_details = weather_data.get("city_details", [])
     if city_details:
@@ -277,8 +250,6 @@ def chart_summary_dashboard(report):
     else:
         ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
         ax.set_title("Weather — City Temperatures", fontsize=12)
-
-    # ── Panel D: Key stats text summary ──────────────────────────────────────
     ax = axes[1][1]
     ax.axis("off")
 
@@ -320,9 +291,6 @@ def chart_summary_dashboard(report):
 
     plt.subplots_adjust(hspace=0.42, wspace=0.38)
     save_fig(fig, "chart5_summary_dashboard.png")
-
-
-# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
     print("=" * 55)
