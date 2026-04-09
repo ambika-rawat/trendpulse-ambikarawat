@@ -10,8 +10,6 @@ import csv
 from datetime import datetime, timezone
 
 
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
 def load_json(filepath):
     """Load a JSON file and return its contents."""
     with open(filepath, "r", encoding="utf-8") as f:
@@ -65,7 +63,7 @@ def process_github(raw):
         name = clean_text(repo.get("name"))
         stars = repo.get("stars", 0)
 
-        # Drop rows missing essential data
+       
         if not name or stars == 0:
             continue
 
@@ -165,7 +163,6 @@ def process_weather(raw):
     """
     print("\n[3/3] Processing weather data...")
 
-    # WMO Weather Interpretation Codes (simplified subset)
     WMO_CODES = {
         0:  "Clear sky",
         1:  "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
@@ -186,7 +183,7 @@ def process_weather(raw):
         code = city.get("weathercode", 0)
         lat  = city.get("latitude", 0)
 
-        # Fill missing numeric values
+        
         temp = float(temp) if temp is not None else 0.0
         wind = float(wind) if wind is not None else 0.0
 
@@ -211,8 +208,6 @@ def process_weather(raw):
     save_csv(cleaned, fieldnames, "weather_data.csv")
     return cleaned
 
-
-# ── Main ──────────────────────────────────────────────────────────────────────
 
 def main():
     print("=" * 55)
@@ -243,7 +238,6 @@ def main():
             print(f"\n  WARNING: {filepath} not found — skipping {key}.")
             summary[key] = 0
 
-    # Save a simple processing report
     report = {
         "processed_at": datetime.utcnow().isoformat() + "Z",
         "rows_processed": summary,
