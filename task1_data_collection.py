@@ -8,9 +8,6 @@ import json
 import os
 from datetime import datetime
 
-
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
 def save_json(data, filename):
     """Save data as a JSON file in the 'raw_data' directory."""
     os.makedirs("raw_data", exist_ok=True)
@@ -41,7 +38,6 @@ def fetch_github_trending():
         response.raise_for_status()
         data = response.json()
 
-        # Keep only the fields we need
         repos = []
         for item in data.get("items", []):
             repos.append({
@@ -102,10 +98,10 @@ def fetch_hacker_news_top():
                         "score": item.get("score", 0),
                         "by": item.get("by", ""),
                         "time": item.get("time", 0),
-                        "descendants": item.get("descendants", 0),   # comment count
+                        "descendants": item.get("descendants", 0),  
                     })
             except requests.RequestException:
-                continue   # skip a single bad story silently
+                continue   
 
         result = {
             "source": "Hacker News Firebase API",
