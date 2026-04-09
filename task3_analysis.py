@@ -75,10 +75,6 @@ def percentile(values, p):
         return float(sorted_vals[-1])
     fraction = index - lower
     return sorted_vals[lower] + fraction * (sorted_vals[upper] - sorted_vals[lower])
-
-
-# ── Analysis functions ────────────────────────────────────────────────────────
-
 def analyse_github(rows):
     """
     Analyse GitHub trending repositories.
@@ -117,9 +113,7 @@ def analyse_github(rows):
         for lang, scores in sorted(lang_popularity.items(),
                                    key=lambda x: mean(x[1]), reverse=True)
     ][:10]
-
-    # Issue-to-star ratio (community engagement proxy)
-    for row in rows:
+for row in rows:
         s = safe_int(row["stars"])
         row["_issue_ratio"] = safe_int(row["open_issues"]) / s if s > 0 else 0.0
 
@@ -131,7 +125,6 @@ def analyse_github(rows):
         for r in top_by_issues
     ]
 
-    # Top 10 repos
     top_repos = sorted(rows, key=lambda x: safe_int(x["popularity_score"]), reverse=True)[:10]
     top10 = [
         {
@@ -197,7 +190,6 @@ def analyse_hackernews(rows):
         for author, count in Counter(authors).most_common(10)
     ]
 
-    # Hour distribution (from posted_at ISO string)
     hours = []
     for row in rows:
         posted = row.get("posted_at", "")
@@ -361,8 +353,6 @@ def main():
         else:
             print(f"\n  WARNING: {filepath} not found — skipping {key}.")
             report[key] = {}
-
-    # Save full analysis report
     os.makedirs("analysis", exist_ok=True)
     report_path = "analysis/analysis_report.json"
     with open(report_path, "w", encoding="utf-8") as f:
