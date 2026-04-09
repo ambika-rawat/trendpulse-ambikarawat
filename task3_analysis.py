@@ -9,10 +9,6 @@ import json
 import os
 from collections import Counter
 from datetime import datetime
-
-
-# ── Helpers ──────────────────────────────────────────────────────────────────
-
 def load_csv(filepath):
     """Load a CSV file and return a list of dicts."""
     rows = []
